@@ -17,6 +17,7 @@ group("front_end") {
     ":legacy_entrypoints",
     "Images",
     "entrypoints/device_mode_emulation_frame",
+    "entrypoints/chii_app",
     "entrypoints/devtools_app",
     "entrypoints/formatter_worker:worker_entrypoint",
     "entrypoints/heap_snapshot_worker:worker_entrypoint",
@@ -118,6 +119,7 @@ node_action("html_entrypoints") {
 
   _devtools_templates = [
     "devtools_app",
+    "chii_app",
     "inspector",
     "js_app",
     "ndb_app",

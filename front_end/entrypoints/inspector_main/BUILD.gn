@@ -62,5 +62,5 @@ devtools_entrypoint("meta") {
 
   deps = [ ":bundle" ]
 
-  visibility = [ "../devtools_app/*" ]
+  visibility = [ "../devtools_app/*", "../chii_app/*" ]
 }

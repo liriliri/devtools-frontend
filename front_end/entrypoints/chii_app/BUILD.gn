@@ -1,0 +1,77 @@
+# Copyright 2021 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+import("../../../scripts/build/ninja/devtools_entrypoint.gni")
+import("../../../scripts/build/ninja/devtools_module.gni")
+import("../../../third_party/typescript/typescript.gni")
+import("../visibility.gni")
+
+devtools_entrypoint("chii_app-meta-files") {
+  entrypoint = "chii_app-meta-files.ts"
+
+  deps = [
+    "../../Images:optimize_images",
+    "../../core/dom_extension:bundle",
+    "../../core/sdk:meta",
+    "../../core/sdk:meta",
+    "../../entrypoints/main:meta",
+    "../../entrypoints/main:meta",
+    "../../entrypoints/startup:bundle",
+    "../../models/logs:meta",
+    "../../models/persistence:meta",
+    "../../panels/application:meta",
+    "../../panels/console:meta",
+    "../../panels/console_counters:meta",
+    "../../panels/input:meta",
+    "../../panels/protocol_monitor:meta",
+    "../../panels/settings:meta",
+    "../../panels/sources:meta",
+    "../../panels/screencast:meta",
+    "../../ui/legacy/components/object_ui:meta",
+    "../../ui/legacy/components/perf_ui:meta",
+    "../../ui/legacy/components/quick_open:meta",
+    "../../ui/legacy/components/source_frame:meta",
+    "../startup:bundle",
+    "../../entrypoints/inspector_main:meta",
+    "../../panels/accessibility:meta",
+    "../../panels/application:meta",
+    "../../panels/browser_debugger:meta",
+    "../../panels/developer_resources:meta",
+    "../../panels/elements:meta",
+    "../../panels/emulation:meta",
+    "../../panels/help:meta",
+    "../../panels/issues:meta",
+    "../../panels/layer_viewer:meta",
+    "../../panels/mobile_throttling:meta",
+    "../../panels/network:meta",
+    "../../panels/sensors:meta",
+  ]
+
+  visibility = [ ":*" ]
+
+  visibility += devtools_entrypoints_visibility
+}
+
+devtools_module("main") {
+  sources = [ "global.ts" ]
+}
+
+devtools_entrypoint("chii_main") {
+  entrypoint = "main.ts"
+
+  deps = [
+    ":main"
+  ]
+}
+
+ts_library("chii_app") {
+  no_emit = true
+  sources = [ "chii_app.js" ]
+
+  deps = [
+    ":chii_main",
+    ":chii_app-meta-files",
+    "../../entrypoints/startup:bundle",
+    "../main:bundle",
+  ]
+}

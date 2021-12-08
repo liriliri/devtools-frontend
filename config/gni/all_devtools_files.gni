@@ -7,6 +7,7 @@ import("../../scripts/build/ninja/vars.gni")
 all_devtools_files = [
   "front_end/entrypoints/shell/shell.js",
   "front_end/entrypoints/devtools_app/devtools_app.js",
+  "front_end/entrypoints/chii_app/chii_app.js",
   "front_end/entrypoints/inspector/inspector.js",
   "front_end/entrypoints/js_app/js_app.js",
   "front_end/entrypoints/ndb_app/ndb_app.js",

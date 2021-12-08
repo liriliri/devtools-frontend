@@ -64,6 +64,7 @@ application_templates = [ "front_end/entrypoint_template.html" ]
 
 devtools_applications = [
   "devtools_app",
+  "chii_app",
   "inspector",
   "js_app",
   "ndb_app",
