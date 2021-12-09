@@ -418,18 +418,20 @@ UI.ViewManager.registerViewExtension({
   },
 });
 
-UI.ViewManager.registerViewExtension({
-  location: UI.ViewManager.ViewLocationValues.NAVIGATOR_VIEW,
-  id: 'navigator-files',
-  commandPrompt: i18nLazyString(UIStrings.showFilesystem),
-  title: i18nLazyString(UIStrings.filesystem),
-  order: 3,
-  persistence: UI.ViewManager.ViewPersistence.PERMANENT,
-  async loadView() {
-    const Sources = await loadSourcesModule();
-    return Sources.SourcesNavigator.FilesNavigatorView.instance();
-  },
-});
+if (!(globalThis as any).chii) {
+  UI.ViewManager.registerViewExtension({
+    location: UI.ViewManager.ViewLocationValues.NAVIGATOR_VIEW,
+    id: 'navigator-files',
+    commandPrompt: i18nLazyString(UIStrings.showFilesystem),
+    title: i18nLazyString(UIStrings.filesystem),
+    order: 3,
+    persistence: UI.ViewManager.ViewPersistence.PERMANENT,
+    async loadView() {
+      const Sources = await loadSourcesModule();
+      return Sources.SourcesNavigator.FilesNavigatorView.instance();
+    },
+  });
+}
 
 UI.ViewManager.registerViewExtension({
   location: UI.ViewManager.ViewLocationValues.NAVIGATOR_VIEW,
