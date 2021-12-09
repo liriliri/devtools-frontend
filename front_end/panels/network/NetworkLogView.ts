@@ -476,13 +476,19 @@ export class NetworkLogView extends Common.ObjectWrapper.eventMixin<EventTypes, 
     this.dataURLFilterUI.addEventListener(
         UI.FilterBar.FilterUIEvents.FilterChanged, this.filterChanged.bind(this), this);
     UI.Tooltip.Tooltip.install(this.dataURLFilterUI.element(), i18nString(UIStrings.hidesDataAndBlobUrls));
-    filterBar.addFilter(this.dataURLFilterUI);
+    if (!(globalThis as any).chii) {
+      filterBar.addFilter(this.dataURLFilterUI);
+    }
 
-    const filterItems =
+    let filterItems =
         Object.values(Common.ResourceType.resourceCategories)
             .map(
                 category =>
                     ({name: category.title(), label: (): string => category.shortTitle(), title: category.title()}));
+    if ((globalThis as any).chii) {
+      filterItems = filterItems.filter(item => item.label() === 'Fetch/XHR' || item.label() === 'WS');
+    }
+
     this.resourceCategoryFilterUI =
         new UI.FilterBar.NamedBitSetFilterUI(filterItems, this.networkResourceTypeFiltersSetting);
     UI.ARIAUtils.setAccessibleName(
@@ -496,7 +502,9 @@ export class NetworkLogView extends Common.ObjectWrapper.eventMixin<EventTypes, 
     this.onlyIssuesFilterUI.addEventListener(
         UI.FilterBar.FilterUIEvents.FilterChanged, this.filterChanged.bind(this), this);
     UI.Tooltip.Tooltip.install(this.onlyIssuesFilterUI.element(), i18nString(UIStrings.onlyShowRequestsWithBlocked));
-    filterBar.addFilter(this.onlyIssuesFilterUI);
+    if (!(globalThis as any).chii) {
+      filterBar.addFilter(this.onlyIssuesFilterUI);
+    }
 
     this.onlyBlockedRequestsUI = new UI.FilterBar.CheckboxFilterUI(
         'only-show-blocked-requests', i18nString(UIStrings.blockedRequests), true,
@@ -504,14 +512,18 @@ export class NetworkLogView extends Common.ObjectWrapper.eventMixin<EventTypes, 
     this.onlyBlockedRequestsUI.addEventListener(
         UI.FilterBar.FilterUIEvents.FilterChanged, this.filterChanged.bind(this), this);
     UI.Tooltip.Tooltip.install(this.onlyBlockedRequestsUI.element(), i18nString(UIStrings.onlyShowBlockedRequests));
-    filterBar.addFilter(this.onlyBlockedRequestsUI);
+    if (!(globalThis as any).chii) {
+      filterBar.addFilter(this.onlyBlockedRequestsUI);
+    }
 
     this.onlyThirdPartyFilterUI = new UI.FilterBar.CheckboxFilterUI(
         'only-show-third-party', i18nString(UIStrings.thirdParty), true, this.networkOnlyThirdPartySetting);
     this.onlyThirdPartyFilterUI.addEventListener(
         UI.FilterBar.FilterUIEvents.FilterChanged, this.filterChanged.bind(this), this);
     UI.Tooltip.Tooltip.install(this.onlyThirdPartyFilterUI.element(), i18nString(UIStrings.onlyShowThirdPartyRequests));
-    filterBar.addFilter(this.onlyThirdPartyFilterUI);
+    if (!(globalThis as any).chii) {
+      filterBar.addFilter(this.onlyThirdPartyFilterUI);
+    }
 
     this.filterParser = new TextUtils.TextUtils.FilterParser(searchKeys);
     this.suggestionBuilder =
