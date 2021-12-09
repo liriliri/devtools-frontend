@@ -139,38 +139,40 @@ UI.ViewManager.registerViewExtension({
   },
 });
 
-UI.ViewManager.registerViewExtension({
-  location: UI.ViewManager.ViewLocationValues.DRAWER_VIEW,
-  id: 'network.blocked-urls',
-  commandPrompt: i18nLazyString(UIStrings.showNetworkRequestBlocking),
-  title: i18nLazyString(UIStrings.networkRequestBlocking),
-  persistence: UI.ViewManager.ViewPersistence.CLOSEABLE,
-  order: 60,
-  async loadView() {
-    const Network = await loadNetworkModule();
-    return Network.BlockedURLsPane.BlockedURLsPane.instance();
-  },
-});
+if (!(globalThis as any).chii) {
+  UI.ViewManager.registerViewExtension({
+    location: UI.ViewManager.ViewLocationValues.DRAWER_VIEW,
+    id: 'network.blocked-urls',
+    commandPrompt: i18nLazyString(UIStrings.showNetworkRequestBlocking),
+    title: i18nLazyString(UIStrings.networkRequestBlocking),
+    persistence: UI.ViewManager.ViewPersistence.CLOSEABLE,
+    order: 60,
+    async loadView() {
+      const Network = await loadNetworkModule();
+      return Network.BlockedURLsPane.BlockedURLsPane.instance();
+    },
+  });
 
-UI.ViewManager.registerViewExtension({
-  location: UI.ViewManager.ViewLocationValues.DRAWER_VIEW,
-  id: 'network.config',
-  commandPrompt: i18nLazyString(UIStrings.showNetworkConditions),
-  title: i18nLazyString(UIStrings.networkConditions),
-  persistence: UI.ViewManager.ViewPersistence.CLOSEABLE,
-  order: 40,
-  tags: [
-    i18nLazyString(UIStrings.diskCache),
-    i18nLazyString(UIStrings.networkThrottling),
-    i18n.i18n.lockedLazyString('useragent'),
-    i18n.i18n.lockedLazyString('user agent'),
-    i18n.i18n.lockedLazyString('user-agent'),
-  ],
-  async loadView() {
-    const Network = await loadNetworkModule();
-    return Network.NetworkConfigView.NetworkConfigView.instance();
-  },
-});
+  UI.ViewManager.registerViewExtension({
+    location: UI.ViewManager.ViewLocationValues.DRAWER_VIEW,
+    id: 'network.config',
+    commandPrompt: i18nLazyString(UIStrings.showNetworkConditions),
+    title: i18nLazyString(UIStrings.networkConditions),
+    persistence: UI.ViewManager.ViewPersistence.CLOSEABLE,
+    order: 40,
+    tags: [
+      i18nLazyString(UIStrings.diskCache),
+      i18nLazyString(UIStrings.networkThrottling),
+      i18n.i18n.lockedLazyString('useragent'),
+      i18n.i18n.lockedLazyString('user agent'),
+      i18n.i18n.lockedLazyString('user-agent'),
+    ],
+    async loadView() {
+      const Network = await loadNetworkModule();
+      return Network.NetworkConfigView.NetworkConfigView.instance();
+    },
+  });
+}
 
 UI.ViewManager.registerViewExtension({
   location: UI.ViewManager.ViewLocationValues.NETWORK_SIDEBAR,

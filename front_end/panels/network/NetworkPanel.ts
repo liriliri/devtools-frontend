@@ -408,30 +408,32 @@ export class NetworkPanel extends UI.Panel.Panel implements UI.ContextMenu.Provi
     this.panelToolbar.appendToolbarItem(searchToggle);
     this.panelToolbar.appendSeparator();
 
-    this.panelToolbar.appendToolbarItem(new UI.Toolbar.ToolbarSettingCheckbox(
-        this.preserveLogSetting, i18nString(UIStrings.doNotClearLogOnPageReload), i18nString(UIStrings.preserveLog)));
+    if (!(globalThis as any).chii) {
+      this.panelToolbar.appendToolbarItem(new UI.Toolbar.ToolbarSettingCheckbox(
+          this.preserveLogSetting, i18nString(UIStrings.doNotClearLogOnPageReload), i18nString(UIStrings.preserveLog)));
 
-    this.panelToolbar.appendSeparator();
-    const disableCacheCheckbox = new UI.Toolbar.ToolbarSettingCheckbox(
-        Common.Settings.Settings.instance().moduleSetting('cacheDisabled'),
-        i18nString(UIStrings.disableCacheWhileDevtoolsIsOpen), i18nString(UIStrings.disableCache));
-    this.panelToolbar.appendToolbarItem(disableCacheCheckbox);
+      this.panelToolbar.appendSeparator();
+      const disableCacheCheckbox = new UI.Toolbar.ToolbarSettingCheckbox(
+          Common.Settings.Settings.instance().moduleSetting('cacheDisabled'),
+          i18nString(UIStrings.disableCacheWhileDevtoolsIsOpen), i18nString(UIStrings.disableCache));
+      this.panelToolbar.appendToolbarItem(disableCacheCheckbox);
 
-    this.panelToolbar.appendToolbarItem(this.throttlingSelect);
+      this.panelToolbar.appendToolbarItem(this.throttlingSelect);
 
-    const networkConditionsIcon = new IconButton.Icon.Icon();
-    networkConditionsIcon.data = {
-      iconName: 'network_conditions_icon',
-      color: 'rgb(110 110 110)',
-      width: '18px',
-      height: '18px',
-    };
-    const networkConditionsButton =
-        new UI.Toolbar.ToolbarButton(i18nString(UIStrings.moreNetworkConditions), networkConditionsIcon);
-    networkConditionsButton.addEventListener(UI.Toolbar.ToolbarButton.Events.Click, () => {
-      void UI.ViewManager.ViewManager.instance().showView('network.config');
-    }, this);
-    this.panelToolbar.appendToolbarItem(networkConditionsButton);
+      const networkConditionsIcon = new IconButton.Icon.Icon();
+      networkConditionsIcon.data = {
+        iconName: 'network_conditions_icon',
+        color: 'rgb(110 110 110)',
+        width: '18px',
+        height: '18px',
+      };
+      const networkConditionsButton =
+          new UI.Toolbar.ToolbarButton(i18nString(UIStrings.moreNetworkConditions), networkConditionsIcon);
+      networkConditionsButton.addEventListener(UI.Toolbar.ToolbarButton.Events.Click, () => {
+        void UI.ViewManager.ViewManager.instance().showView('network.config');
+      }, this);
+      this.panelToolbar.appendToolbarItem(networkConditionsButton);
+    }
 
     this.rightToolbar.appendToolbarItem(new UI.Toolbar.ToolbarItem(this.progressBarContainer));
     this.rightToolbar.appendSeparator();
