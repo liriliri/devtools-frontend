@@ -231,7 +231,9 @@ export class ApplicationPanelSidebar extends UI.Widget.VBox implements SDK.Targe
     const manifestTreeElement = new AppManifestTreeElement(panel);
     this.applicationTreeElement.appendChild(manifestTreeElement);
     this.serviceWorkersTreeElement = new ServiceWorkersTreeElement(panel);
-    this.applicationTreeElement.appendChild(this.serviceWorkersTreeElement);
+    if (!(globalThis as any).chii) {
+      this.applicationTreeElement.appendChild(this.serviceWorkersTreeElement);
+    }
     const clearStorageTreeElement = new ClearStorageTreeElement(panel);
     this.applicationTreeElement.appendChild(clearStorageTreeElement);
 
@@ -264,7 +266,9 @@ export class ApplicationPanelSidebar extends UI.Widget.VBox implements SDK.Targe
     const databaseIcon = UI.Icon.Icon.create('mediumicon-database', 'resource-tree-item');
     this.databasesListTreeElement.setLeadingIcons([databaseIcon]);
 
-    storageTreeElement.appendChild(this.databasesListTreeElement);
+    if (!(globalThis as any).chii) {
+      storageTreeElement.appendChild(this.databasesListTreeElement);
+    }
     this.cookieListTreeElement =
         new ExpandableApplicationPanelTreeElement(panel, i18nString(UIStrings.cookies), 'Cookies');
     this.cookieListTreeElement.setLink(
@@ -274,17 +278,22 @@ export class ApplicationPanelSidebar extends UI.Widget.VBox implements SDK.Targe
     storageTreeElement.appendChild(this.cookieListTreeElement);
 
     this.trustTokensTreeElement = new TrustTokensTreeElement(panel);
-    storageTreeElement.appendChild(this.trustTokensTreeElement);
+    if (!(globalThis as any).chii) {
+      storageTreeElement.appendChild(this.trustTokensTreeElement);
+    }
 
     const cacheSectionTitle = i18nString(UIStrings.cache);
     const cacheTreeElement = this.addSidebarSection(cacheSectionTitle);
+    if ((globalThis as any).chii) {
+      this.sidebarTree.removeChild(cacheTreeElement);
+    }
     this.cacheStorageListTreeElement = new ServiceWorkerCacheTreeElement(panel);
     cacheTreeElement.appendChild(this.cacheStorageListTreeElement);
 
     this.backForwardCacheListTreeElement = new BackForwardCacheTreeElement(panel);
     cacheTreeElement.appendChild(this.backForwardCacheListTreeElement);
 
-    if (Root.Runtime.experiments.isEnabled('backgroundServices')) {
+    if (!(globalThis as any).chii && Root.Runtime.experiments.isEnabled('backgroundServices')) {
       const backgroundServiceSectionTitle = i18nString(UIStrings.backgroundServices);
       const backgroundServiceTreeElement = this.addSidebarSection(backgroundServiceSectionTitle);
 
@@ -427,6 +436,10 @@ export class ApplicationPanelSidebar extends UI.Widget.VBox implements SDK.Targe
     if (cacheStorageModel) {
       cacheStorageModel.enable();
     }
+
+    if ((globalThis as any).chii) {
+      return;
+    }
     const serviceWorkerCacheModel =
         this.target && this.target.model(SDK.ServiceWorkerCacheModel.ServiceWorkerCacheModel) || null;
     this.cacheStorageListTreeElement.initialize(serviceWorkerCacheModel);
@@ -467,6 +480,9 @@ export class ApplicationPanelSidebar extends UI.Widget.VBox implements SDK.Targe
   }
 
   private resetWebSQL(): void {
+    if ((globalThis as any).chii) {
+      return;
+    }
     for (const queryView of this.databaseQueryViews.values()) {
       queryView.removeEventListener(DatabaseQueryViewEvents.SchemaUpdated, event => {
         this.updateDatabaseTables(event);
