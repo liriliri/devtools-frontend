@@ -4,7 +4,7 @@
 
 import * as Platform from '../platform/platform.js';
 
-const queryParamsObject = new URLSearchParams(location.search);
+const queryParamsObject = new URLSearchParams(location.search || location.hash.replace(/^#/, ''));
 
 let runtimePlatform = '';
 
