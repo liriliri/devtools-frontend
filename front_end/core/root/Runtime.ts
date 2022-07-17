@@ -5,7 +5,7 @@
 const originalConsole = console;
 const originalAssert = console.assert;
 
-const queryParamsObject = new URLSearchParams(location.search);
+const queryParamsObject = new URLSearchParams(location.search || location.hash.replace(/^#/, ''));
 
 let runtimePlatform = '';
 
