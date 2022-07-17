@@ -75,6 +75,31 @@ export class MainConnection implements ProtocolClient.InspectorBackend.Connectio
   }
 }
 
+export class EmbeddedConnection implements ProtocolClient.InspectorBackend.Connection {
+  onMessage: ((arg0: Object) => void) | null;
+  private targetOrigin: string = '';
+  constructor(targetOrigin: string) {
+    this.targetOrigin = targetOrigin;
+    this.onMessage = null;
+    window.addEventListener('message', event => {
+      if (event.origin === this.targetOrigin && this.onMessage) {
+        this.onMessage(event.data);
+      }
+    })
+  }
+  setOnMessage(onMessage: (arg0: (Object|string)) => void): void {
+    this.onMessage = onMessage;
+  }
+  sendRawMessage(message: string): void {
+    window.parent.postMessage(message, this.targetOrigin);
+  }
+  setOnDisconnect(onDisconnect: (arg0: string) => void): void {
+  }
+  disconnect(): Promise<void> {
+    return Promise.resolve();
+  }
+}
+
 export class WebSocketConnection implements ProtocolClient.InspectorBackend.Connection {
   #socket: WebSocket|null;
   onMessage: ((arg0: (Object|string)) => void)|null;
@@ -280,6 +305,10 @@ export async function initMainConnection(
 function createMainConnection(websocketConnectionLost: () => void): ProtocolClient.InspectorBackend.Connection {
   const wsParam = Root.Runtime.Runtime.queryParam('ws');
   const wssParam = Root.Runtime.Runtime.queryParam('wss');
+  const embeddedParam = Root.Runtime.Runtime.queryParam('embedded');
+  if (embeddedParam) {
+    return new EmbeddedConnection(embeddedParam)
+  }
   if (wsParam || wssParam) {
     const ws = wsParam ? `ws://${wsParam}` : `wss://${wssParam}`;
     return new WebSocketConnection(ws, websocketConnectionLost);

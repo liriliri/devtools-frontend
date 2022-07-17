@@ -5,7 +5,7 @@
 const originalConsole = console;
 const originalAssert = console.assert;
 
-const queryParamsObject = new URLSearchParams(location.search);
+const queryParamsObject = new URLSearchParams(location.search || location.hash.replace(/^#/, ''));
 
 // The following variable are initialized all the way at the bottom of this file
 let importScriptPathPrefix: string;
